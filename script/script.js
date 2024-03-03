@@ -177,10 +177,6 @@ function handleIteratingMode(placeholderIds) {
     (acc, curr) => Math.max(acc, curr),
     0
   );
-  const minDataRowLen = sizeOfAllRows.reduce(
-    (acc, curr) => Math.min(acc, curr),
-    Infinity
-  );
   const mismatchedData = data.filter((lst) => lst.length != maxDataRowLen);
 
   let maxPlaceholderIndex = -1;
@@ -210,11 +206,6 @@ function handleIteratingMode(placeholderIds) {
       "error"
     ] = `Maximum placeholder index will not possible for the given data.
         <br>Maximum Row Size: ${maxDataRowLen}, Maximum Index Given: ${maxPlaceholderIndex}`;
-  } else if (minDataRowLen - 1 > minPlaceholderIndex) {
-    res[
-      "error"
-    ] = `Minimum placeholder index will not possible for the given data.
-    <br>Minimum Row Size: ${minDataRowLen}, Minimum Index Given: ${minPlaceholderIndex}`;
   } else if (mismatchedData.length) {
     res[
       "error"
