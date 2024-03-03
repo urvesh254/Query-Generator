@@ -81,7 +81,7 @@ function handleOnBlurQueryField() {
 
   if (!placeholders.size) {
     placeholderTable.innerHTML = NO_PLACEHOLDER_FOUND;
-    showAlert("No placeholder found");
+    showToast("No placeholder found");
   } else if (!isPlaceholderValid) {
     placeholderTable.innerHTML = NO_PLACEHOLDER_FOUND;
     showAlert(
