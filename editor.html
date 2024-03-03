@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Editor</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      #editor,
+      #output1 {
+        width: 98%;
+        margin: auto;
+        height: 200px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        text-wrap: nowrap;
+        overflow: auto;
+        word-spacing: pre;
+        white-space: pre;
+      }
+
+      div[contenteditable="true"]::placeholder {
+        color: gray;
+        font-style: italic;
+      }
+
+      div[contenteditable="true"]:empty::before {
+        content: attr(placeholder);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Text Editor</h1>
+    <div
+      id="editor"
+      contenteditable="true"
+      placeholder="Enter query here..."
+      spellcheck="false"
+    ></div>
+    <ul id="placeholders"></ul>
+    <pre id="output1"></pre>
+    <script>
+      const editor = document.getElementById("editor");
+      const regex = /style=".*?"/gm;
+      const regex_placeholders = /{.*?}/gm;
+
+      const contentFormat = () => {
+        // removing style
+        editor.innerHTML = editor.innerHTML.replaceAll(regex, "");
+
+        // highlighting placeholders
+        let str = editor.innerText;
+        // Use the matchAll() method to return an iterator of all matches
+        const matches = str.matchAll(regex_placeholders);
+
+        // Iterate through the matches and log each match
+        let lis = "";
+        const placeholders = new Set();
+        for (const match of matches) {
+          //   console.log(match[0]);
+          if (!placeholders.has(match[0])) lis += `<li>${match[0]}</li>`;
+          placeholders.add(match[0]);
+          let formattedMatch = `<span style="color: red;background-color: yellow;font-weight: bold;">${match[0]}</span>`;
+          str = str.replaceAll(match[0], formattedMatch);
+        }
+        document.getElementById("placeholders").innerHTML = lis;
+        editor.innerHTML = str;
+        document.getElementById("output1").innerHTML = editor.innerText;
+      };
+
+      editor.addEventListener("blur", contentFormat);
+    </script>
+  </body>
+</html>

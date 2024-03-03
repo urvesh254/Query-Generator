@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Query Generator",
+  "version": "1.0",
+  "description": "Automate the Query Generation Process",
+  "permissions": ["tabs", "storage"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon/icon.png"
+  },
+  "icons": {
+    "16": "icon/icon.png",
+    "48": "icon/icon.png",
+    "128": "icon/icon.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["index.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["css/style.css"]
+    }
+  ]
+}

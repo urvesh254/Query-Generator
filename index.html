@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Query Generator</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Query Generator</h1>
+    </header>
+    <main>
+      <div class="content-wrapper">
+        <label for="query">Query:</label>
+        <textarea spellcheck="false" id="query" rows="10"></textarea>
+
+        <div id="data-div">
+          <label for="data">Data:</label>
+          <textarea spellcheck="false" id="data" rows="10"></textarea>
+        </div>
+
+        <div class="iteration-mode">
+          <label for="delimiter">Delimiter</label>
+          <input
+            type="text"
+            id="delimiter"
+            value="$"
+            placeholder="Delimiter"
+            title="Delimiter"
+          />
+          <input type="checkbox" id="iteration-mode" checked />
+          <label for="iteration-mode">Iteration Mode</label>
+        </div>
+
+        <div id="placeholder-div">
+          <label id="placeholder-label">Placeholders</label>
+          <table>
+            <thead>
+              <tr>
+                <th>Placeholder</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody id="placeholder-table">
+              <tr>
+                <td colspan="2" style="text-align: center">
+                  No placeholder found
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button id="generate">Generate</button>
+
+        <div class="output">
+          <div class="toolbar">
+            <label>Output:</label>
+            <input
+              type="text"
+              id="filename"
+              placeholder="File Name"
+              value="output.txt"
+              title="Output File Name"
+            />
+            <img
+              id="download"
+              src="icon/downloads.png"
+              alt="download"
+              width="30px"
+              title="Download"
+            />
+            <img
+              id="copy"
+              src="icon/copy.png"
+              alt="copy"
+              width="30px"
+              title="Copy to Clipboard"
+            />
+            <img
+              id="clear"
+              src="icon/clear.png"
+              alt="clear"
+              width="30px"
+              title="Clear Output"
+            />
+          </div>
+          <textarea
+            spellcheck="false"
+            disabled
+            id="output"
+            placeholder="Output is shown here"
+          ></textarea>
+        </div>
+        <div class="toast-container" id="toastContainer"></div>
+
+        <!-- Toast Message -->
+        <div class="custom-alert-overlay" id="customAlertOverlay"></div>
+
+        <!-- Alert Box -->
+        <div class="custom-alert" id="customAlert">
+          <div class="alert-content">
+            <p id="alertMessage">This is a custom alert message!</p>
+            <button id="closeAlert">OK</button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <h3>Developed by Urveshkumar Patel</h3>
+    </footer>
+    <script src="script/utility.js"></script>
+    <script src="script/script.js"></script>
+    <script src="script/eventHandlers.js"></script>
+    <!-- <script src="script/test.js"></script> -->
+  </body>
+</html>
