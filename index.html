@@ -23,20 +23,23 @@
           <textarea spellcheck="false" id="data" rows="10"></textarea>
         </div>
 
-        <div class="iteration-mode">
-          <label for="delimiter">Delimiter</label
-          ><span class="info-label" data="delimiter"></span>
-
-          <input
-            type="text"
-            id="delimiter"
-            value="$"
-            placeholder="Delimiter"
-            title="Delimiter"
-          />
-          <input type="checkbox" id="iteration-mode" checked />
-          <label for="iteration-mode">Iteration Mode</label>
-          <span class="info-label" data="iteration-mode"></span>
+        <div class="options">
+          <div class="option" id="delimiter-option">
+            <label for="delimiter">Delimiter</label
+            ><span class="info-label" data="delimiter"></span>
+            <input
+              type="text"
+              id="delimiter"
+              value="$"
+              placeholder="Delimiter"
+              title="Delimiter"
+            />
+          </div>
+          <div class="option" id="option-iteration-mode">
+            <input type="checkbox" id="iteration-mode" checked />
+            <label for="iteration-mode">Iteration Mode</label>
+            <span class="info-label" data="iteration-mode"></span>
+          </div>
         </div>
 
         <div id="placeholder-div">
@@ -122,6 +125,6 @@
     <script src="script/script.js"></script>
     <script src="script/eventHandlers.js"></script>
     <script src="script/tooltip.js"></script>
-    <!-- <script src="script/test.js"></script> -->
+    <script src="script/test.js"></script>
   </body>
 </html>

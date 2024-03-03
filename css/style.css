@@ -111,29 +111,46 @@ textarea {
   max-height: 500px;
 }
 
-.iteration-mode {
+.options {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
+.options .option {
+  margin-right: 50px;
+  margin-bottom: 10px;
+}
 
-.iteration-mode input[type="checkbox"] {
-  margin: 10px 10px 10px 5px;
+.options input[type="checkbox"] {
   width: auto;
   transform: scale(1.5);
-}
-.iteration-mode input[type="text"] {
-  margin: 10px 10px 10px 5px;
-  width: 45px;
-  height: 40px;
-  margin-right: 50px;
+  margin: 0;
+  margin-right: 10px;
 }
 
-.iteration-mode label {
+.options input[type="text"] {
+  width: 45px;
+  height: 40px;
+  margin: 0;
+  margin-left: 10px;
+}
+
+.options label {
   margin: 0;
   color: #555;
   font-weight: 600;
   font-size: 18px;
+}
+
+@media only screen and (max-width: 600px) {
+  .options {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .options .option {
+    margin-right: 0;
+  }
 }
 
 #placeholder-div {
