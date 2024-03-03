@@ -1,4 +1,5 @@
-document.getElementById("output").value = `
+function initializeData() {
+  document.getElementById("output").value = `
 INSERT INTO wf_hierarchy_reference_mst 
 (hierarchy_seq_id   ,hierarchy_ref_id   ,reference_name                        ,description                           ,doc_id,activate_flag,db_id,loc_code,branch_code,parent_hierarchy_ref_id,lang_id,created_user_id,created_post_code,created_post_version_id,created_date     ,updated_user_id,updated_post_code,updated_post_version_id,updated_date,logical_hierarchy_code) VALUES
 ({hierarchy_ref_id} ,{hierarchy_ref_id} ,'{emp_id} - Tours and Travels Request','{emp_id} - Tours and Travels Request',{doc_id},1            ,1    ,'1'     ,'40174'    ,0                      ,1      ,720005         ,720005           ,1                      ,current_timestamp,NULL           ,NULL             ,NULL                   ,NULL        ,null                  )
@@ -18,9 +19,9 @@ INSERT INTO acl_ele_sub_opn_post_rlt
 ((SELECT max(ele_sub_opn_post_id)+1 FROM acl_ele_sub_opn_post_rlt) ,{ele_sub_id}    ,{button_code} ,1          ,720005         ,720005           ,1                      ,now()        ,null           ,null             ,null                   ,null         ,{hierarchy_ref_id} ,{level_id}     )
 ;
 '''`;
-document.getElementById("query").value =
-  document.getElementById("output").value;
-document.getElementById("data").value = `
+  document.getElementById("query").value =
+    document.getElementById("output").value;
+  document.getElementById("data").value = `
 znbaan$uitlhzr$uyncey$pgdmmkzulp$auynnik$dbtczm$stvvpd
 isgnec$uxnisbsjk$azdffgedu$lioooow$arqevzh$lvqcmjw$xmmtzl
 nygpczro$chkdiao$gczkkpvebn$mxzgunvoh$jqtwvyuiud$vpenhzbn$couaizmgm
@@ -10276,7 +10277,7 @@ msupernga$medyzzjhu$rcuvrxbmas$nmbgat$axzhln$qmdtdf$vpbfjdjznv
 lkmaipc$lbmekcxe$crxkjjbwb$foxngoxgtd$dgfwfwb$uvtuc$vxwvyp
 `;
 
-document.getElementById("query").value = "";
-document.getElementById("output").value = "";
-document.getElementById("data").value = "";
-// handleOnBlurQueryField();
+  handleOnBlurQueryField();
+}
+
+// initializeData();

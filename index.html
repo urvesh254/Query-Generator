@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Query Generator</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" href="icon/icon.png" type="image/png" />
   </head>
   <body>
     <header>
@@ -12,16 +13,20 @@
     </header>
     <main>
       <div class="content-wrapper">
-        <label for="query">Query:</label>
+        <label for="query">Query</label>
+        <span class="info-label" data="query"></span>
         <textarea spellcheck="false" id="query" rows="10"></textarea>
 
         <div id="data-div">
-          <label for="data">Data:</label>
+          <label for="data">Data</label>
+          <span class="info-label" data="data"></span>
           <textarea spellcheck="false" id="data" rows="10"></textarea>
         </div>
 
         <div class="iteration-mode">
-          <label for="delimiter">Delimiter</label>
+          <label for="delimiter">Delimiter</label
+          ><span class="info-label" data="delimiter"></span>
+
           <input
             type="text"
             id="delimiter"
@@ -31,10 +36,13 @@
           />
           <input type="checkbox" id="iteration-mode" checked />
           <label for="iteration-mode">Iteration Mode</label>
+          <span class="info-label" data="iteration-mode"></span>
         </div>
 
         <div id="placeholder-div">
-          <label id="placeholder-label">Placeholders</label>
+          <label id="placeholder-label" class="info-label" data="placeholders"
+            >Placeholders</label
+          >
           <table>
             <thead>
               <tr>
@@ -113,6 +121,7 @@
     <script src="script/utility.js"></script>
     <script src="script/script.js"></script>
     <script src="script/eventHandlers.js"></script>
+    <script src="script/tooltip.js"></script>
     <!-- <script src="script/test.js"></script> -->
   </body>
 </html>

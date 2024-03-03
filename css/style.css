@@ -58,6 +58,25 @@ label {
   user-select: none;
 }
 
+label {
+  display: inline-block; /* Ensures the label has its own space */
+  position: relative; /* Ensures the pseudo-element is positioned relative to the label */
+}
+
+/* .info-label::after { */
+.info-label::after {
+  content: "";
+  background-image: url("../icon/info1.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
 textarea,
 input,
 button {
@@ -315,7 +334,7 @@ td:last-child {
   transform: translate(-50%, -50%);
   background-color: #fff; /* background color */
   color: #333; /* text color */
-  padding: 20px;
+  padding: 10px 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   z-index: 9999;
@@ -324,7 +343,7 @@ td:last-child {
 .alert-content {
   position: relative;
   word-wrap: break-word;
-  font-size: 13px;
+  font-size: 15px;
   display: flex;
   flex-direction: column;
 }
@@ -332,7 +351,9 @@ td:last-child {
 #closeAlert {
   width: fit-content;
   margin: auto;
+  font-size: 13px;
   cursor: pointer;
+  margin-top: 10px;
   color: #fff;
   background-color: #007bff;
   border-color: #007bff;
