@@ -1,23 +1,24 @@
 /* Customizing scrollbar for the whole website */
 ::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888; /* Color of the thumb */
-  border-radius: 15px; /* Roundness of the thumb */
+  background: #888;
+  border-radius: 15px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Color of the thumb on hover */
+  background: #555;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Color of the track */
+  background: #f1f1f1;
 }
 
 ::-webkit-scrollbar-track:hover {
-  background: #ccc; /* Color of the track on hover */
+  background: #ccc;
 }
 
 body {
@@ -59,11 +60,10 @@ label {
 }
 
 label {
-  display: inline-block; /* Ensures the label has its own space */
-  position: relative; /* Ensures the pseudo-element is positioned relative to the label */
+  display: inline-block;
+  position: relative;
 }
 
-/* .info-label::after { */
 .info-label::after {
   content: "";
   background-image: url("../icon/info1.png");
