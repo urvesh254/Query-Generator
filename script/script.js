@@ -15,20 +15,13 @@ function copyToClipboard() {
 
 function clearOutput() {
   document.getElementById("output").value = "";
+  showToast("Output cleared");
 }
 
 function downloadContent() {
-  const content = document.getElementById("output").value;
   const filename = document.getElementById("filename").value;
-
-  const blob = new Blob([content], { type: "text/plain" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = filename || "output.txt";
-  link.click();
-
-  URL.revokeObjectURL(link.href);
-
+  const content = document.getElementById("output").value;
+  downloadFile(content);
   showToast(`${filename} downloaded`);
 }
 
@@ -97,52 +90,61 @@ function handleOnBlurQueryField() {
 }
 
 function handleClickGenerate() {
-  const query = document.getElementById("query");
-  const itrMode = document.getElementById("iteration-mode");
-  const inputs = document.querySelectorAll("#placeholder-table input");
-  const placeholderIds = [...inputs].map((input) => input.id);
+  try {
+    const query = document.getElementById("query");
+    const itrMode = document.getElementById("iteration-mode");
+    const inputs = document.querySelectorAll("#placeholder-table input");
+    const placeholderIds = [...inputs].map((input) => input.id);
+    const output = document.getElementById("output");
 
-  // Validate input
-  if (query.value == "") {
-    showAlert("Query should not be empty");
-    return;
-  }
-
-  if (placeholderIds.length == 0) {
-    showAlert("No placeholder found");
-    return;
-  }
-
-  let data, placeholdersIndexes;
-  if (itrMode.checked) {
-    // Iterating mode
-    let res = handleIteratingMode(placeholderIds);
-    if (res.error) {
-      showAlert(res.error);
+    // Validate input
+    if (query.value == "") {
+      showAlert("Query should not be empty");
       return;
     }
-    data = res.data;
-    placeholdersIndexes = res.placeholdersIndexes;
-  } else {
-    // Normal Mode
-    let res = handleNormalMode(placeholderIds);
-    if (res.error) {
-      showAlert(res.error);
+
+    if (placeholderIds.length == 0) {
+      showAlert("No placeholder found");
       return;
     }
-    data = res.data;
-    placeholdersIndexes = res.placeholdersIndexes;
-  }
 
-  // query, lst, placeholders
-  const btnGenerate = document.getElementById("generate");
-  btnGenerate.disabled = true;
-  // This is written because button is not disabled on time.
-  setTimeout(() => {
-    replacePlaceholders(query.value, data, placeholdersIndexes);
+    let res;
+    if (itrMode.checked) {
+      // Iterating mode
+      res = handleIteratingMode(placeholderIds);
+    } else {
+      // Normal Mode
+      res = handleNormalMode(placeholderIds);
+    }
+
+    if (res.error) {
+      showAlert(res.error);
+      output.value = "";
+      return;
+    }
+
+    res["query"] = query.value;
+    const btnGenerate = document.getElementById("generate");
+    btnGenerate.disabled = true;
+
+    const finalOutput = replacePlaceholders(res);
+    const sizeInMB = getStringSizeInMB(finalOutput);
+    if (sizeInMB > MAX_OUTPUT_SIZE_IN_MB) {
+      downloadFile(finalOutput);
+      showAlert(
+        `Output size is <b>${sizeInMB.toFixed(2)}MB</b>. 
+      Due to its size, the output will be downloaded directly.`
+      );
+      output.value = "";
+    } else {
+      output.value = finalOutput;
+      showToast("Query generated successfully");
+    }
     btnGenerate.disabled = false;
-    showToast("Query generated successfully");
-  }, 1);
+  } catch (error) {
+    console.error(error);
+    showToast(error);
+  }
 }
 
 function handleNormalMode(placeholderIds) {
@@ -167,42 +169,60 @@ function handleIteratingMode(placeholderIds) {
   const placeholdersIndexes = {};
   const dataStr = document.getElementById("data").value.trim();
   const delimiter = document.getElementById("delimiter").value;
+
+  // Processing data, finding max, min and mismatched data.
   const data = dataStr.split("\n").map((row) => row.split(delimiter));
-  const maxDataRowLen = Math.max(...data.map((lst) => lst.length));
-  //   const minDataRowLen = Math.min(...data.map((lst) => lst.length));
+  const sizeOfAllRows = data.map((lst) => lst.length);
+  const maxDataRowLen = sizeOfAllRows.reduce(
+    (acc, curr) => Math.max(acc, curr),
+    0
+  );
+  const minDataRowLen = sizeOfAllRows.reduce(
+    (acc, curr) => Math.min(acc, curr),
+    Infinity
+  );
   const mismatchedData = data.filter((lst) => lst.length != maxDataRowLen);
 
-  let maxPlaceholderLen = -1;
-  let minPlaceholderLen = 0;
+  let maxPlaceholderIndex = -1;
+  let minPlaceholderIndex = Infinity;
   const errorPlaceholders = [];
   for (const id of placeholderIds) {
     let value = document.getElementById(id).value || "";
 
     placeholdersIndexes[id] = parseInt(value);
     if (value) {
-      maxPlaceholderLen = Math.max(maxPlaceholderLen, placeholdersIndexes[id]);
-      minPlaceholderLen = Math.min(minPlaceholderLen, placeholdersIndexes[id]);
+      maxPlaceholderIndex = Math.max(
+        maxPlaceholderIndex,
+        placeholdersIndexes[id]
+      );
+      minPlaceholderIndex = Math.min(
+        minPlaceholderIndex,
+        placeholdersIndexes[id]
+      );
     } else errorPlaceholders.push(id);
   }
 
-  if (maxDataRowLen <= maxPlaceholderLen) {
+  // Validation Errors
+  if (minPlaceholderIndex < 0) {
+    res["error"] = "Negative index not allowed";
+  } else if (maxDataRowLen <= maxPlaceholderIndex) {
     res[
       "error"
     ] = `Maximum placeholder index will not possible for the given data.
-        <br>Maximum Row Size: ${maxDataRowLen}, Maximum Index Given: ${maxPlaceholderLen}`;
-  }
-
-  if (mismatchedData.length) {
+        <br>Maximum Row Size: ${maxDataRowLen}, Maximum Index Given: ${maxPlaceholderIndex}`;
+  } else if (minDataRowLen - 1 > minPlaceholderIndex) {
+    res[
+      "error"
+    ] = `Minimum placeholder index will not possible for the given data.
+    <br>Minimum Row Size: ${minDataRowLen}, Minimum Index Given: ${minPlaceholderIndex}`;
+  } else if (mismatchedData.length) {
     res[
       "error"
     ] = `All data does not have same length<br><br><b>Mismatched data</b> <br> 
-    ${mismatchedData.join("<br>")}`;
+    ${mismatchedData.map((str) => `"${str}"`).join("<br>")}`;
   }
 
-  if (minPlaceholderLen < 0) {
-    res["error"] = "Negative index not allowed";
-  }
-
+  // Warning
   if (errorPlaceholders.length) {
     let message = `Below fields are empty. Please verify once.
           <div style="color:#ddb100;"><b>Warning:</b> [${errorPlaceholders}]</div>`;
@@ -214,10 +234,11 @@ function handleIteratingMode(placeholderIds) {
   return res;
 }
 
-function replacePlaceholders(query, data, placeholdersIndexes) {
-  console.log(new Date(), "replacePlaceholders start...");
-  const output = document.getElementById("output");
-  output.value = "";
+function replacePlaceholders(obj) {
+  const query = obj.query + "\n";
+  const data = obj.data;
+  const placeholdersIndexes = obj.placeholdersIndexes;
+  console.log(new Date().getTime(), "replacePlaceholders start...");
   let finalData = "";
 
   for (let row of data) {
@@ -229,7 +250,10 @@ function replacePlaceholders(query, data, placeholdersIndexes) {
     }
     finalData += finalRow;
   }
-  output.value = finalData;
-  //   btnGenerate.disabled = false;
-  console.log(new Date(), "replacePlaceholders end...");
+
+  console.log(new Date().getTime(), "replacePlaceholders end...");
+  lst = finalData.match(/insert/gi);
+  console.log(data.length);
+  console.log(`Total insert queries: ${lst ? lst.length : 0}`);
+  return finalData;
 }

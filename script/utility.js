@@ -1,6 +1,7 @@
 const REGEX_PLACEHOLDER = /{.*?}/gm;
 const REGEX_VALID_PLACEHOLDER = /^{[a-zA-Z0-9_]+}$/;
 const NO_PLACEHOLDER_FOUND = `<tr><td colspan="2" style="text-align: center;">No placeholder found</td></tr>`;
+const MAX_OUTPUT_SIZE_IN_MB = 10; //
 
 function generateId() {
   return (
@@ -59,4 +60,25 @@ function closeAlert() {
   overlay.style.display = "none";
   alertBox.style.display = "none";
   document.body.style.overflow = "";
+}
+
+function getStringSizeInMB(str) {
+  // Get the byte length of the string
+  const byteLength = new Blob([str]).size;
+
+  // Convert bytes to megabytes
+  const megabytes = byteLength / (1024 * 1024);
+
+  return megabytes;
+}
+
+function downloadFile(content) {
+  const filename = document.getElementById("filename").value;
+  const blob = new Blob([content], { type: "text/plain" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = filename || "output.txt";
+  link.click();
+
+  URL.revokeObjectURL(link.href);
 }
