@@ -123,6 +123,8 @@ function handleClickGenerate() {
       return;
     }
 
+    showLoading();
+
     res["query"] = query.value;
     const btnGenerate = document.getElementById("generate");
     btnGenerate.disabled = true;
@@ -141,8 +143,10 @@ function handleClickGenerate() {
       showToast("Query generated successfully");
     }
     btnGenerate.disabled = false;
+    hideLoading();
   } catch (error) {
     console.error(error);
+    hideLoading();
     showToast(error);
   }
 }
@@ -244,7 +248,7 @@ function replacePlaceholders(obj) {
 
   console.log(new Date().getTime(), "replacePlaceholders end...");
   lst = finalData.match(/insert/gi);
-  console.log(data.length);
+  console.log("Data Length: ", data.length);
   console.log(`Total insert queries: ${lst ? lst.length : 0}`);
   return finalData;
 }

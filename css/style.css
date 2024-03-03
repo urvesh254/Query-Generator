@@ -75,6 +75,7 @@ label {
   display: inline-block;
   vertical-align: middle;
   margin-left: 5px;
+  cursor: pointer;
 }
 
 textarea,
@@ -387,4 +388,48 @@ footer {
   color: #fff;
   padding: 10px;
   text-align: center;
+}
+
+/* Loading animation overlay */
+.loading-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 9996;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading {
+  display: flex !important;
+}
+
+/* Loader animation */
+.loader {
+  border: 6px solid #3f51b5;
+  border-radius: 50%;
+  border-top: 6px solid transparent;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #333;
 }

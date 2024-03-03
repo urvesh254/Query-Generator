@@ -82,3 +82,13 @@ function downloadFile(content) {
 
   URL.revokeObjectURL(link.href);
 }
+
+function showLoading() {
+  const loadingOverlay = document.querySelector(".loading-overlay");
+  loadingOverlay.classList.add("loading");
+}
+
+function hideLoading() {
+  const loadingOverlay = document.querySelector(".loading-overlay");
+  loadingOverlay.classList.remove("loading");
+}
