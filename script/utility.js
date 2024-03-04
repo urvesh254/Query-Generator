@@ -1,7 +1,7 @@
 const REGEX_PLACEHOLDER = /{.*?}/gm;
 const REGEX_VALID_PLACEHOLDER = /^{[a-zA-Z0-9_]+}$/;
 const NO_PLACEHOLDER_FOUND = `<tr><td colspan="2" style="text-align: center;">No placeholder found</td></tr>`;
-const MAX_OUTPUT_SIZE_IN_MB = 10; //
+const MAX_OUTPUT_SIZE_IN_MB = 3; //
 
 function generateId() {
   return (
@@ -9,13 +9,13 @@ function generateId() {
   );
 }
 
-function showToast(message) {
+function showToast(message, delay = 2500) {
   if (message == "") return;
 
   // Create a new toast element
   const toastElement = document.createElement("div");
   toastElement.classList.add("toast");
-  toastElement.textContent = message;
+  toastElement.innerHTML = message;
 
   // Add the toast to the container
   const container = document.getElementById("toastContainer");
@@ -32,7 +32,7 @@ function showToast(message) {
       toastElement.addEventListener("transitionend", () => {
         container.removeChild(toastElement);
       });
-    }, 2500);
+    }, delay);
   }, 100);
 }
 
@@ -86,9 +86,11 @@ function downloadFile(content) {
 function showLoading() {
   const loadingOverlay = document.querySelector(".loading-overlay");
   loadingOverlay.classList.add("loading");
+  document.body.style.overflow = "hidden";
 }
 
 function hideLoading() {
   const loadingOverlay = document.querySelector(".loading-overlay");
   loadingOverlay.classList.remove("loading");
+  document.body.style.overflow = "";
 }

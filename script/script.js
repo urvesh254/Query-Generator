@@ -89,6 +89,13 @@ function handleOnBlurQueryField() {
   handleChangeIterationMode();
 }
 
+function handleClickGenerateWorker() {
+  showLoading();
+
+  // It will execute this method using
+  setTimeout(handleClickGenerate, 700);
+}
+
 function handleClickGenerate() {
   try {
     const query = document.getElementById("query");
@@ -123,8 +130,6 @@ function handleClickGenerate() {
       return;
     }
 
-    showLoading();
-
     res["query"] = query.value;
     const btnGenerate = document.getElementById("generate");
     btnGenerate.disabled = true;
@@ -135,19 +140,19 @@ function handleClickGenerate() {
       downloadFile(finalOutput);
       showAlert(
         `Output size is <b>${sizeInMB.toFixed(2)}MB</b>. 
-      Due to its size, the output will be downloaded directly.`
+        Due to its size, the output will be downloaded directly.`
       );
       output.value = "";
     } else {
       output.value = finalOutput;
-      showToast("Query generated successfully");
+      showAlert("Query generated successfully");
     }
     btnGenerate.disabled = false;
-    hideLoading();
   } catch (error) {
     console.error(error);
-    hideLoading();
     showToast(error);
+  } finally {
+    hideLoading();
   }
 }
 
@@ -156,12 +161,22 @@ function handleNormalMode(placeholderIds) {
   const row = [];
   const res = {};
   const placeholdersIndexes = {};
+  const errorPlaceholders = [];
   let index = 0;
   for (const id of placeholderIds) {
-    row.push(document.getElementById(id).value || "");
+    const value = document.getElementById(id).value;
+    if (!value) errorPlaceholders.push(id);
+    row.push(value || "");
     placeholdersIndexes[id] = index++;
   }
   data.push(row);
+
+  // Warning
+  if (errorPlaceholders.length) {
+    let message = `Below fields are empty. Please verify once.
+            <div style="color:#ddb100;"><b>Warning:</b> [${errorPlaceholders}]</div>`;
+    showToast(message);
+  }
 
   res["data"] = data;
   res["placeholdersIndexes"] = placeholdersIndexes;
@@ -209,19 +224,19 @@ function handleIteratingMode(placeholderIds) {
     res[
       "error"
     ] = `Maximum placeholder index will not possible for the given data.
-        <br>Maximum Row Size: ${maxDataRowLen}, Maximum Index Given: ${maxPlaceholderIndex}`;
+          <br>Maximum Row Size: ${maxDataRowLen}, Maximum Index Given: ${maxPlaceholderIndex}`;
   } else if (mismatchedData.length) {
     res[
       "error"
     ] = `All data does not have same length<br><br><b>Mismatched data</b> <br> 
-    ${mismatchedData.map((str) => `"${str}"`).join("<br>")}`;
+      ${mismatchedData.map((str) => `"${str}"`).join("<br>")}`;
   }
 
   // Warning
   if (errorPlaceholders.length) {
     let message = `Below fields are empty. Please verify once.
-          <div style="color:#ddb100;"><b>Warning:</b> [${errorPlaceholders}]</div>`;
-    showAlert(message);
+            <div style="color:#ddb100;"><b>Warning:</b> [${errorPlaceholders}]</div>`;
+    showToast(message);
   }
 
   res["data"] = data;

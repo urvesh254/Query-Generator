@@ -5,7 +5,7 @@ addEvent("query", "blur", handleOnBlurQueryField);
 addEvent("iteration-mode", "click", handleChangeIterationMode);
 
 // Generate Button
-addEvent("generate", "click", handleClickGenerate);
+addEvent("generate", "click", handleClickGenerateWorker);
 
 // Download Output File
 addEvent("download", "click", downloadContent);

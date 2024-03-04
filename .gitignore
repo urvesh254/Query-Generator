@@ -1,2 +1,4 @@
 script/test.js
 *.bat
+*.zip
+QueryGenerator/
