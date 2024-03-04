@@ -196,6 +196,10 @@ table tr td input {
   font-size: 100%;
 }
 
+table tr td input:placeholder-shown {
+  border-color: red;
+}
+
 tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
