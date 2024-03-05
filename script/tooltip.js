@@ -8,10 +8,11 @@ for (const info of infoIcons) {
 
 const TOOLTIP_QUERY = `
 Enter your query here. Include placeholders to dynamically replace values in the string. For example, use placeholders like <b><code>{placeholder_name}</code></b> to represent dynamic content that will be replaced during output generation.<br><br>
-<b>i.e.</b> <code>update table_name set active_flag = <b>{active_flag}</b> where emp_id = <b>{emp_id}</b>;</code><br>
-<b>Placeholders:</b> <code>[{active_flag},{emp_id}]</code>
+<b>i.e.</b><pre><code>INSERT INTO employee (  emp_id,                                emp_name,     address,     dob,     designation     )
+VALUES               ( (SELECT MAX(emp_id) + 1 FROM employee), '<b>{emp_name}</b>', '<b>{address}</b>', '<b>{dob}</b>', '<b>{designation}</b>' );
+</code></pre><br>
 `;
-const TOOLTIP_DATA = `This field is used to input the data that you want to dynamically insert into the <b>Query String.</b> The data should be provided as a string, with a <b>specific delimiter</b> used to separate different values. It can include multiline data. Ensure to use the correct delimiter for accurate parsing of your data.<br><br><b>For example:</b><br><code>Urvesh$123$01/01/2001$Software Engineer</code><br>In this example, data is separated with <b>'$'</b>.`;
+const TOOLTIP_DATA = `This field is used to input the data that you want to dynamically insert into the <b>Query String.</b> The data should be provided as a string, with a <b>specific delimiter</b> used to separate different values. It can include multiline data. Ensure to use the correct delimiter for accurate parsing of your data.<br><br><b>For example:</b><br><code>Urvesh$Gujarat, India$01/01/2001$Software Engineer</code><br>In this example, data is separated with <b>'$'</b>.`;
 const TOOLTIP_DELIMITER = `
 Specify the delimiter for your data. Delimiters are characters or strings used to separate different values in your data. Common delimiters include commas<b>(,)</b>, dollar<b>($)</b>, semicolons<b>(;)</b>, and hash<b>(#)</b>. Choose the appropriate delimiter to ensure accurate parsing of your data.
 `;

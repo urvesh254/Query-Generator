@@ -412,6 +412,10 @@ td:last-child {
   flex-direction: column;
 }
 
+#alertMessage {
+  overflow: auto;
+}
+
 #closeAlert {
   width: fit-content;
   margin: auto;
