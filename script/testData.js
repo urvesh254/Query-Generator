@@ -10024,7 +10024,8 @@ gnklusrpv$pawcd$ihxcjb$dkvoyrztxr$avplejq$nkgfps$lkjzj
 sikks$zotgtujx$ehpme$qjgeempw$gcprisgit$mpkqupfsag$nzkmvmagqr
 `;
 
+  contentFormat();
   handleOnBlurQueryField();
 }
 
-initializeData();
+// initializeData();

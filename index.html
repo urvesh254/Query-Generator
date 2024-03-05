@@ -15,7 +15,10 @@
       <div class="content-wrapper">
         <label for="query">Query</label>
         <span class="info-label" data="query"></span>
-        <textarea spellcheck="false" id="query" rows="10"></textarea>
+        <div class="query-parent">
+          <textarea spellcheck="false" id="query" rows="10"></textarea>
+          <div class="overlay" id="overlay"></div>
+        </div>
 
         <div id="data-div">
           <label for="data">Data</label>
@@ -49,13 +52,14 @@
           <table>
             <thead>
               <tr>
-                <th>Placeholder</th>
-                <th>Value</th>
+                <th class="text-center">Sr No.</th>
+                <th class="text-center">Placeholder</th>
+                <th class="text-center">Value</th>
               </tr>
             </thead>
             <tbody id="placeholder-table">
               <tr>
-                <td colspan="2" style="text-align: center">
+                <td colspan="3" style="text-align: center">
                   No placeholder found
                 </td>
               </tr>
@@ -130,6 +134,6 @@
     <script src="script/script.js"></script>
     <script src="script/eventHandlers.js"></script>
     <script src="script/tooltip.js"></script>
-    <!-- <script src="script/test.js"></script> -->
+    <script src="script/testData.js"></script>
   </body>
 </html>

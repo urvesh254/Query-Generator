@@ -43,51 +43,69 @@ function handleChangeIterationMode() {
     : "none";
 }
 
-function handleOnBlurQueryField() {
+/* Query Field Handling - Start */
+function contentFormat() {
   const query = document.getElementById("query");
-
-  // Find All placeholders
-  const matches = query.value.matchAll(REGEX_PLACEHOLDER);
+  const overlay = document.getElementById("overlay");
+  let str = query.value;
+  const matches = str.matchAll(REGEX_PLACEHOLDER);
+  const placeholderTable = document.getElementById("placeholder-table");
   const placeholders = new Set();
-  const errorPlaceholders = new Set();
-  let isPlaceholderValid = true;
+  placeholderTable.innerHTML = "";
+
+  let i = 0;
   for (const match of matches) {
     const placeholder = match[0];
 
-    isPlaceholderValid =
-      isPlaceholderValid & REGEX_VALID_PLACEHOLDER.test(placeholder);
-    if (!REGEX_VALID_PLACEHOLDER.test(placeholder)) {
-      errorPlaceholders.add(placeholder);
+    let formattedMatch = `<span class="highlight">${placeholder}</span>`;
+    str = str.replaceAll(placeholder, formattedMatch);
+    if (!placeholders.has(placeholder)) {
+      placeholderTable.innerHTML += `
+    <tr>
+      <td class="text-center">${++i}</td>
+      <td>${placeholder}</td>
+      <td><input id=${placeholder} type="text" placeholder="Enter value" /></td>
+    </tr>`;
     }
     placeholders.add(placeholder);
   }
 
-  // Put that in placeholders table
-  const placeholderTable = document.getElementById("placeholder-table");
-  placeholderTable.innerHTML = "";
-  for (const placeholder of placeholders) {
-    placeholderTable.innerHTML += `<tr>
-        <td>${placeholder}</td>
-        <td><input id=${placeholder} type="text" placeholder="Enter value" /></td>
-    </tr>`;
-  }
-
+  // If no placeholders are found then it will show default message.
   if (!placeholders.size) {
     placeholderTable.innerHTML = NO_PLACEHOLDER_FOUND;
-    showToast("No placeholder found");
-  } else if (!isPlaceholderValid) {
-    placeholderTable.innerHTML = NO_PLACEHOLDER_FOUND;
-    showAlert(
-      `The placeholder must include only alphabetic characters (A-Z, both uppercase and lowercase) and '_'
-        <div style="color:red;"><b>Error:</b> [${[
-          ...errorPlaceholders,
-        ].toString()}]</div>
-      `
-    );
   }
+
+  overlay.innerHTML = str + "</br>";
 
   handleChangeIterationMode();
 }
+
+function handleScroll() {
+  const query = document.getElementById("query");
+  const overlay = document.getElementById("overlay");
+
+  const scrollTop = query.scrollTop;
+  overlay.scrollTop = scrollTop;
+
+  const scrollLeft = query.scrollLeft;
+  overlay.scrollLeft = scrollLeft;
+}
+
+function resizeOverlay() {
+  const overlay = document.getElementById("overlay");
+  const query = document.getElementById("query");
+  const queryParent = document.querySelector(".query-parent");
+
+  overlay.style.width = query.clientWidth + "px";
+  overlay.style.height = query.clientHeight + "px";
+  queryParent.style.height = query.clientHeight + "px";
+}
+
+function handleOnBlurQueryField() {
+  const inputs = document.querySelectorAll("#placeholder-table input");
+  if (!inputs.length) showToast("No placeholder found");
+}
+/* Query Field Handling - End */
 
 function handleClickGenerateWorker() {
   showLoading();

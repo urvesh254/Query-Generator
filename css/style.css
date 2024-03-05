@@ -11,6 +11,7 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+  cursor: default;
 }
 
 ::-webkit-scrollbar-track {
@@ -19,6 +20,7 @@
 
 ::-webkit-scrollbar-track:hover {
   background: #ccc;
+  cursor: default;
 }
 
 body {
@@ -80,7 +82,8 @@ label {
 
 textarea,
 input,
-button {
+button,
+.overlay {
   width: 100%;
   padding: 12px;
   margin-bottom: 20px;
@@ -101,15 +104,50 @@ button:focus {
   background-color: #fff;
 }
 
-textarea {
-  text-wrap: nowrap;
+textarea,
+.overlay {
   overflow: auto;
-  word-spacing: pre;
   white-space: pre;
   max-width: 100%;
   min-width: 100%;
   min-height: 300px;
   max-height: 500px;
+}
+
+/* Highlighting Query */
+.query-parent {
+  text-rendering: optimizeLegibility;
+  position: relative;
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 300px;
+  max-height: 500px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.overlay {
+  color: transparent;
+  font-family: monospace;
+}
+
+#query {
+  background-color: transparent;
+  z-index: 2;
+}
+
+#query,
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.highlight {
+  background-color: yellow;
+  color: #333;
+  font-weight: 600;
+  border-radius: 3px;
 }
 
 .options {
@@ -223,6 +261,10 @@ td:first-child {
 th,
 td:last-child {
   padding-right: 20px;
+}
+
+.text-center {
+  text-align: center;
 }
 
 #generate {

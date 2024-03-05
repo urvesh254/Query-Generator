@@ -1,6 +1,6 @@
-const REGEX_PLACEHOLDER = /{.*?}/gm;
+const REGEX_PLACEHOLDER = /{[a-zA-Z0-9_]+}/gm;
 const REGEX_VALID_PLACEHOLDER = /^{[a-zA-Z0-9_]+}$/;
-const NO_PLACEHOLDER_FOUND = `<tr><td colspan="2" style="text-align: center;">No placeholder found</td></tr>`;
+const NO_PLACEHOLDER_FOUND = `<tr><td colspan="3" style="text-align: center;">No placeholder found</td></tr>`;
 const MAX_OUTPUT_SIZE_IN_MB = 3; //
 
 function generateId() {
