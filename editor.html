@@ -3,76 +3,217 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Text Editor</title>
+    <title>Highlighting Textarea</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
+      /* Customizing scrollbar for the whole website */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
       }
-      #editor,
-      #output1 {
-        width: 98%;
-        margin: auto;
-        height: 200px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-        text-wrap: nowrap;
+
+      ::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 15px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+        cursor: default;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-track:hover {
+        background: #ccc;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 30px;
+        background-color: #f0f0f0;
+      }
+
+      .container,
+      .backdrop,
+      textarea {
+        min-width: 100%;
+        max-width: 100%;
+        height: 300px;
+        min-height: 300px;
+        max-height: 500px;
         overflow: auto;
-        word-spacing: pre;
+      }
+
+      .highlights,
+      textarea {
+        padding: 10px;
+        font: 20px / 28px monospace;
+        letter-spacing: 1px;
         white-space: pre;
       }
 
-      div[contenteditable="true"]::placeholder {
-        color: gray;
-        font-style: italic;
+      .container {
+        /* height: 300px; */
+        display: block;
+        margin: 0 auto;
+        transform: translateZ(0);
+        -webkit-text-size-adjust: none;
+        overflow: hidden;
       }
 
-      div[contenteditable="true"]:empty::before {
-        content: attr(placeholder);
+      .backdrop {
+        position: absolute;
+        z-index: 1;
+        border: 2px solid #685972;
+        background-color: #fff;
+        overflow: auto;
+        pointer-events: none;
+        transition: transform 1s;
+        /* max-height: 500px; */
+      }
+
+      .highlights {
+        color: transparent;
+      }
+
+      textarea {
+        display: block;
+        position: absolute;
+        z-index: 2;
+        margin: 0;
+        border: 2px solid #74637f;
+        border-radius: 0;
+        color: #444;
+        background-color: transparent;
+        overflow: auto;
+        min-height: 300px;
+        max-height: 500px;
+        max-width: 100%;
+        transition: transform 1s;
+      }
+
+      mark {
+        border-radius: 3px;
+        color: transparent;
+        font-weight: 500;
+        color: black;
       }
     </style>
   </head>
   <body>
-    <h1>Text Editor</h1>
-    <div
-      id="editor"
-      contenteditable="true"
-      placeholder="Enter query here..."
-      spellcheck="false"
-    ></div>
+    <h1>Highlighting Textarea</h1>
+    <div class="container">
+      <div class="backdrop">
+        <div class="highlights"></div>
+      </div>
+      <textarea spellcheck="false">
+INSERT INTO wf_hierarchy_reference_mst 
+(hierarchy_seq_id   ,hierarchy_ref_id   ,reference_name                        ,description                           ,doc_id,activate_flag,db_id,loc_code,branch_code,parent_hierarchy_ref_id,lang_id,created_user_id,created_post_code,created_post_version_id,created_date     ,updated_user_id,updated_post_code,updated_post_version_id,updated_date,logical_hierarchy_code) VALUES
+({hierarchy_ref_id} ,{hierarchy_ref_id} ,'{emp_id} - Tours and Travels Request','{emp_id} - Tours and Travels Request',{doc_id},1            ,1    ,'1'     ,'40174'    ,0                      ,1      ,720005         ,720005           ,1                      ,current_timestamp,NULL           ,NULL             ,NULL                   ,NULL        ,null                  )
+;
+'''
+
+hierarchy_post_mpg_query = '''
+INSERT INTO wf_hierarchy_post_mpg 
+(hierarchy_seq_id                                            ,parent_hierarchy,post_code ,level_id   ,hierarchy_ref_id   ,start_date       ,end_date,activate_flag,loc_code,due_days,due_days_unit,created_user_id,created_post_code,created_post_version_id,created_date     ,updated_user_id,updated_post_code,updated_post_version_id,updated_date,hierarchy_distribution) VALUES
+((SELECT max(hierarchy_seq_id)+1 FROM wf_hierarchy_post_mpg) ,NULL            ,{post_id} ,{level_id} ,{hierarchy_ref_id} ,current_timestamp,NULL    ,1            ,1       ,0       ,NULL         ,720005         ,720005           ,1                      ,current_timestamp,NULL           ,NULL             ,NULL                   ,NULL        ,1                     )
+;
+'''
+
+button_mapping_query = '''
+INSERT INTO acl_ele_sub_opn_post_rlt 
+(ele_sub_opn_post_id                                               ,ele_sub_id,ele_opn_rlt_id,active_flag,created_user_id,created_post_code,created_post_version_id,created_date ,updated_user_id,updated_post_code,updated_post_version_id,updated_date ,hierarchy_ref_id   ,hierarchy_level) VALUES
+((SELECT max(ele_sub_opn_post_id)+1 FROM acl_ele_sub_opn_post_rlt) ,{ele_sub_id}    ,{button_code} ,1          ,720005         ,720005           ,1                      ,now()        ,null           ,null             ,null                   ,null         ,{hierarchy_ref_id} ,{level_id}     )
+; 
+</textarea
+      >
+    </div>
+
+    <br /><br />
+    <h3>Placeholders</h3>
     <ul id="placeholders"></ul>
-    <pre id="output1"></pre>
     <script>
-      const editor = document.getElementById("editor");
-      const regex = /style=".*?"/gm;
-      const regex_placeholders = /{.*?}/gm;
+      const $container = document.querySelector(".container");
+      const $backdrop = document.querySelector(".backdrop");
+      const $highlights = document.querySelector(".highlights");
+      const $textarea = document.querySelector("textarea");
+      const $toggle = document.querySelector("button");
 
-      const contentFormat = () => {
-        // removing style
-        editor.innerHTML = editor.innerHTML.replaceAll(regex, "");
+      const ua = window.navigator.userAgent.toLowerCase();
+      const isIE = !!ua.match(/msie|trident\/7|edge/);
+      const isWinPhone = ua.indexOf("windows phone") !== -1;
+      const isIOS = !isWinPhone && !!ua.match(/ipad|iphone|ipod/);
+      const REGEX_PLACEHOLDER = /{.*?}/g;
+      function applyHighlights(text) {
+        text = text
+          .replace(/\n$/g, "\n\n")
+          .replace(REGEX_PLACEHOLDER, "<mark>$&</mark>");
 
-        // highlighting placeholders
-        let str = editor.innerText;
-        // Use the matchAll() method to return an iterator of all matches
-        const matches = str.matchAll(regex_placeholders);
+        if (isIE) {
+          text = text.replace(/ /g, " <wbr>");
+        }
 
-        // Iterate through the matches and log each match
+        return text;
+      }
+
+      function handleInput() {
+        const text = $textarea.value;
+        const highlightedText = applyHighlights(text);
+        $highlights.innerHTML = highlightedText;
+
+        handleFindPlaceholder(text);
+      }
+
+      function handleScroll() {
+        const scrollTop = $textarea.scrollTop;
+        $backdrop.scrollTop = scrollTop;
+
+        const scrollLeft = $textarea.scrollLeft;
+        $backdrop.scrollLeft = scrollLeft;
+      }
+
+      function fixIOS() {
+        $highlights.style.paddingLeft = "+=3px";
+        $highlights.style.paddingRight = "+=3px";
+      }
+
+      function resizeBackdrop() {
+        $backdrop.style.width = $textarea.clientWidth + "px";
+        $backdrop.style.height = $textarea.clientHeight + "px";
+        $container.style.height = $textarea.clientHeight + "px";
+      }
+
+      function handleFindPlaceholder(str) {
+        const matches = str.matchAll(REGEX_PLACEHOLDER);
         let lis = "";
         const placeholders = new Set();
         for (const match of matches) {
-          //   console.log(match[0]);
           if (!placeholders.has(match[0])) lis += `<li>${match[0]}</li>`;
           placeholders.add(match[0]);
-          let formattedMatch = `<span style="color: red;background-color: yellow;font-weight: bold;">${match[0]}</span>`;
-          str = str.replaceAll(match[0], formattedMatch);
         }
         document.getElementById("placeholders").innerHTML = lis;
-        editor.innerHTML = str;
-        document.getElementById("output1").innerHTML = editor.innerText;
-      };
+      }
 
-      editor.addEventListener("blur", contentFormat);
+      function bindEvents() {
+        $textarea.addEventListener("input", handleInput);
+        $textarea.addEventListener("input", handleFindPlaceholder);
+        $textarea.addEventListener("scroll", handleScroll);
+        new ResizeObserver(resizeBackdrop).observe($textarea);
+      }
+
+      if (isIOS) {
+        fixIOS();
+      }
+
+      bindEvents();
+      handleInput();
+      resizeBackdrop();
     </script>
   </body>
 </html>

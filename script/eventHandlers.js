@@ -1,5 +1,8 @@
-// Query Field
+// Query Field Validations
 addEvent("query", "blur", handleOnBlurQueryField);
+addEvent("query", "input", contentFormat);
+addEvent("query", "scroll", handleScroll);
+new ResizeObserver(resizeOverlay).observe(document.getElementById("query"));
 
 // Iteration Mode Checkbox
 addEvent("iteration-mode", "click", handleChangeIterationMode);
