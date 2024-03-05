@@ -53,6 +53,9 @@ function contentFormat() {
   const placeholders = new Set();
   placeholderTable.innerHTML = "";
 
+  // removing '<' and '>' tag to resolve dirty content issue
+  str = str.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+
   let i = 0;
   for (const match of matches) {
     const placeholder = match[0];
