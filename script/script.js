@@ -21,7 +21,7 @@ function clearOutput() {
 function downloadContent() {
   const filename = document.getElementById("filename").value;
   const content = document.getElementById("output").value;
-  downloadFile(content);
+  downloadFile(content, filename);
   showToast(`${filename} downloaded`);
 }
 
@@ -155,10 +155,11 @@ function handleClickGenerate() {
     const btnGenerate = document.getElementById("generate");
     btnGenerate.disabled = true;
 
+    const filename = document.getElementById("filename").value;
     const finalOutput = replacePlaceholders(res);
     const sizeInMB = getStringSizeInMB(finalOutput);
     if (sizeInMB > MAX_OUTPUT_SIZE_IN_MB) {
-      downloadFile(finalOutput);
+      downloadFile(finalOutput, filename);
       showAlert(
         `Output size is <b>${sizeInMB.toFixed(2)}MB</b>. 
         Due to its size, the output will be downloaded directly.`
