@@ -72,8 +72,7 @@ function getStringSizeInMB(str) {
   return megabytes;
 }
 
-function downloadFile(content) {
-  const filename = document.getElementById("filename").value;
+function downloadFile(content, filename = "output.txt") {
   const blob = new Blob([content], { type: "text/plain" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
@@ -83,8 +82,9 @@ function downloadFile(content) {
   URL.revokeObjectURL(link.href);
 }
 
-function showLoading() {
+function showLoading(message = "Output Generating...") {
   const loadingOverlay = document.querySelector(".loading-overlay");
+  loadingOverlay.querySelector(".loading-text").innerHTML = message;
   loadingOverlay.classList.add("loading");
   document.body.style.overflow = "hidden";
 }
