@@ -52,6 +52,7 @@ function openAlert() {
   overlay.style.display = "block";
   alertBox.style.display = "block";
   document.body.style.overflow = "hidden";
+  document.getElementById("closeAlert").focus();
 }
 
 function closeAlert() {

@@ -9,12 +9,36 @@
   </head>
   <body>
     <header>
+      <img
+        src="icon/menu.png"
+        alt="Menu Icon"
+        id="menuIcon"
+        width="30px"
+        style="cursor: pointer"
+      />
       <h1>Query Generator</h1>
+      <span class="menu-item" id="about">About</span>
     </header>
     <main>
+      <!-- Sidebar -->
+      <div class="sidebar" id="sidebar">
+        <input type="search" id="queryNameSearch" placeholder="Query Name" />
+        <div id="queryNameListDiv">
+          <ul id="queryNameList"></ul>
+        </div>
+      </div>
+      <!-- Sidebar -->
+
       <div class="content-wrapper">
+        <input
+          type="text"
+          placeholder="File Name"
+          id="queryName"
+          value="Untitled"
+          spellcheck="false"
+        />
         <label for="query">Query</label>
-        <span class="info-label" data="query"></span>
+        <span class="info-label" data="query" title="Info"></span>
         <div class="query-parent">
           <textarea spellcheck="false" id="query" rows="10"></textarea>
           <div class="overlay" id="overlay"></div>
@@ -22,14 +46,14 @@
 
         <div id="data-div">
           <label for="data">Data</label>
-          <span class="info-label" data="data"></span>
+          <span class="info-label" data="data" title="Info"></span>
           <textarea spellcheck="false" id="data" rows="10"></textarea>
         </div>
 
         <div class="options">
           <div class="option" id="delimiter-option">
             <label for="delimiter">Delimiter</label
-            ><span class="info-label" data="delimiter"></span>
+            ><span class="info-label" data="delimiter" title="Info"></span>
             <input
               type="text"
               id="delimiter"
@@ -41,12 +65,16 @@
           <div class="option" id="option-iteration-mode">
             <input type="checkbox" id="iteration-mode" checked />
             <label for="iteration-mode">Iteration Mode</label>
-            <span class="info-label" data="iteration-mode"></span>
+            <span class="info-label" data="iteration-mode" title="Info"></span>
           </div>
         </div>
 
         <div id="placeholder-div">
-          <label id="placeholder-label" class="info-label" data="placeholders"
+          <label
+            id="placeholder-label"
+            class="info-label"
+            data="placeholders"
+            title="Info"
             >Placeholders</label
           >
           <table>
@@ -85,6 +113,7 @@
               alt="download"
               width="30px"
               title="Download"
+              class="img-btn"
             />
             <img
               id="copy"
@@ -92,6 +121,7 @@
               alt="copy"
               width="30px"
               title="Copy to Clipboard"
+              class="img-btn"
             />
             <img
               id="clear"
@@ -99,6 +129,7 @@
               alt="clear"
               width="30px"
               title="Clear Output"
+              class="img-btn"
             />
           </div>
           <textarea
@@ -131,9 +162,10 @@
       <h3>Developed by Urveshkumar Patel</h3>
     </footer>
     <script src="script/utility.js"></script>
+    <script src="script/saveUtility.js"></script>
     <script src="script/script.js"></script>
     <script src="script/eventHandlers.js"></script>
     <script src="script/tooltip.js"></script>
-    <script src="script/testData.js"></script>
+    <!-- <script src="script/testData.js"></script> -->
   </body>
 </html>

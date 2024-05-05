@@ -10027,5 +10027,78 @@ sikks$zotgtujx$ehpme$qjgeempw$gcprisgit$mpkqupfsag$nzkmvmagqr
   contentFormat();
   handleOnBlurQueryField();
 }
-
-// initializeData();
+const tempQueryData = {
+  "c5e3f1c8-975b-4b55-967f-d8c59a5d4f1e": {
+    queryId: "c5e3f1c8-975b-4b55-967f-d8c59a5d4f1e",
+    queryName: "Query1",
+    query: "SELECT * FROM data WHERE condition = true",
+    "iteration-mode": "single",
+    Delimiter: ";",
+    createdDate: "2024-04-29T00:00:00Z",
+  },
+  "b4f9a8d3-2d24-4e23-bd72-3c36e0a39f10": {
+    queryId: "b4f9a8d3-2d24-4e23-bd72-3c36e0a39f10",
+    queryName: "Query2",
+    query: "SELECT column1, column2 FROM table2 WHERE condition = false",
+    "iteration-mode": "multiple",
+    Delimiter: ",",
+    createdDate: "2024-04-29T00:00:00Z",
+  },
+  "d8a7b2f1-8e2c-43c8-8df7-6c3e5f7a1e23": {
+    queryId: "d8a7b2f1-8e2c-43c8-8df7-6c3e5f7a1e23",
+    queryName: "Query3",
+    query: "SELECT * FROM table3 WHERE condition = true",
+    "iteration-mode": "single",
+    Delimiter: "|",
+    createdDate: "2024-04-29T00:00:00Z",
+  },
+  "e4f9c8d1-6b2e-49e6-8e23-5a8c4f7b9a0e": {
+    queryId: "e4f9c8d1-6b2e-49e6-8e23-5a8c4f7b9a0e",
+    queryName: "Query4",
+    query: "SELECT * FROM table1 WHERE condition = true",
+    "iteration-mode": "multiple",
+    Delimiter: ";",
+    createdDate: "2024-04-29T00:00:00Z",
+  },
+  "a7d3e8c5-2e7c-4f1a-8d1f-3c4e5f7a0b2c": {
+    queryId: "a7d3e8c5-2e7c-4f1a-8d1f-3c4e5f7a0b2c",
+    queryName: "Query5",
+    query: "SELECT * FROM table2 WHERE condition = false",
+    "iteration-mode": "single",
+    Delimiter: "\t",
+    createdDate: "2024-04-29T00:00:00Z",
+  },
+  "f8e9a7c3-1d2e-4b5f-8c1e-2f3e4a5b7c9d": {
+    queryId: "f8e9a7c3-1d2e-4b5f-8c1e-2f3e4a5b7c9d",
+    queryName: "Query6",
+    query: "SELECT column1 FROM table3",
+    "iteration-mode": "multiple",
+    Delimiter: ",",
+    createdDate: "2024-04-29T00:00:00Z",
+  },
+  "b9d2c8a4-3e5f-4a6d-9b2e-7c8d4e1a3f5g": {
+    queryId: "b9d2c8a4-3e5f-4a6d-9b2e-7c8d4e1a3f5g",
+    queryName: "Query7",
+    query: "SELECT * FROM data WHERE condition = true",
+    "iteration-mode": "single",
+    Delimiter: ";",
+    createdDate: "2024-04-29T00:00:00Z",
+  },
+  "c3d4a7b8-9f5e-4d6b-8a7c-1e9d8b2a3c4d": {
+    queryId: "c3d4a7b8-9f5e-4d6b-8a7c-1e9d8b2a3c4d",
+    queryName: "Query8",
+    query: "SELECT column1, column2 FROM table2 WHERE condition = false",
+    "iteration-mode": "multiple",
+    Delimiter: "|",
+    createdDate: "2024-04-29T00:00:00Z",
+  },
+  "a5b3e9c1-7d2e-4f6b-9a7d-8c4e1f5a3b6c": {
+    queryId: "a5b3e9c1-7d2e-4f6b-9a7d-8c4e1f5a3b6c",
+    queryName: "Query9",
+    query: "SELECT column1 FROM table3 WHERE condition = true",
+    "iteration-mode": "single",
+    Delimiter: ",",
+    createdDate: "2024-04-29T00:00:00Z",
+  },
+};
+initializeData();
