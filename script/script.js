@@ -124,10 +124,16 @@ function handleClickGenerate() {
     const inputs = document.querySelectorAll("#placeholder-table input");
     const placeholderIds = [...inputs].map((input) => input.id);
     const output = document.getElementById("output");
+    const delimiter = document.getElementById("delimiter");
 
     // Validate input
     if (query.value == "") {
       showAlert("Query should not be empty");
+      return;
+    }
+
+    if (delimiter.value == "") {
+      showAlert("Delimiter should not be empty");
       return;
     }
 

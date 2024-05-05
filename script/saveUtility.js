@@ -6,92 +6,17 @@ const KEY_ITERATION_MODE = "iteration-mode";
 const KEY_DELIMITER = "delimiter";
 const KEY_CREATED_DATE = "createdDate";
 const DEFAULT_FILE_NAME = "Untitled";
-const tempQueryData1 = {
-  "c5e3f1c8-975b-4b55-967f-d8c59a5d4f1e": {
-    queryId: "c5e3f1c8-975b-4b55-967f-d8c59a5d4f1e",
-    queryName: "Query1",
-    query: "SELECT * FROM data WHERE condition = true",
-    "iteration-mode": "single",
-    Delimiter: ";",
-    createdDate: "2024-04-29T00:00:00Z",
-  },
-  "b4f9a8d3-2d24-4e23-bd72-3c36e0a39f10": {
-    queryId: "b4f9a8d3-2d24-4e23-bd72-3c36e0a39f10",
-    queryName: "Query2",
-    query: "SELECT column1, column2 FROM table2 WHERE condition = false",
-    "iteration-mode": "multiple",
-    Delimiter: ",",
-    createdDate: "2024-04-29T00:00:00Z",
-  },
-  "d8a7b2f1-8e2c-43c8-8df7-6c3e5f7a1e23": {
-    queryId: "d8a7b2f1-8e2c-43c8-8df7-6c3e5f7a1e23",
-    queryName: "Query3",
-    query: "SELECT * FROM table3 WHERE condition = true",
-    "iteration-mode": "single",
-    Delimiter: "|",
-    createdDate: "2024-04-29T00:00:00Z",
-  },
-  "e4f9c8d1-6b2e-49e6-8e23-5a8c4f7b9a0e": {
-    queryId: "e4f9c8d1-6b2e-49e6-8e23-5a8c4f7b9a0e",
-    queryName: "Query4",
-    query: "SELECT * FROM table1 WHERE condition = true",
-    "iteration-mode": "multiple",
-    Delimiter: ";",
-    createdDate: "2024-04-29T00:00:00Z",
-  },
-  "a7d3e8c5-2e7c-4f1a-8d1f-3c4e5f7a0b2c": {
-    queryId: "a7d3e8c5-2e7c-4f1a-8d1f-3c4e5f7a0b2c",
-    queryName: "Query5",
-    query: "SELECT * FROM table2 WHERE condition = false",
-    "iteration-mode": "single",
-    Delimiter: "\t",
-    createdDate: "2024-04-29T00:00:00Z",
-  },
-  "f8e9a7c3-1d2e-4b5f-8c1e-2f3e4a5b7c9d": {
-    queryId: "f8e9a7c3-1d2e-4b5f-8c1e-2f3e4a5b7c9d",
-    queryName: "Query6",
-    query: "SELECT column1 FROM table3",
-    "iteration-mode": "multiple",
-    Delimiter: ",",
-    createdDate: "2024-04-29T00:00:00Z",
-  },
-  "b9d2c8a4-3e5f-4a6d-9b2e-7c8d4e1a3f5g": {
-    queryId: "b9d2c8a4-3e5f-4a6d-9b2e-7c8d4e1a3f5g",
-    queryName: "Query7",
-    query: "SELECT * FROM data WHERE condition = true",
-    "iteration-mode": "single",
-    Delimiter: ";",
-    createdDate: "2024-04-29T00:00:00Z",
-  },
-  "c3d4a7b8-9f5e-4d6b-8a7c-1e9d8b2a3c4d": {
-    queryId: "c3d4a7b8-9f5e-4d6b-8a7c-1e9d8b2a3c4d",
-    queryName: "Query8",
-    query: "SELECT column1, column2 FROM table2 WHERE condition = false",
-    "iteration-mode": "multiple",
-    Delimiter: "|",
-    createdDate: "2024-04-29T00:00:00Z",
-  },
-  "a5b3e9c1-7d2e-4f6b-9a7d-8c4e1f5a3b6c": {
-    queryId: "a5b3e9c1-7d2e-4f6b-9a7d-8c4e1f5a3b6c",
-    queryName: "Query9",
-    query: "SELECT column1 FROM table3 WHERE condition = true",
-    "iteration-mode": "single",
-    Delimiter: ",",
-    createdDate: "2024-04-29T00:00:00Z",
-  },
-};
 const queryData = getQueryDataFromLocalStorage();
-// const queryData = tempQueryData1;
 const rawQueryItem = `<li class="query-item">
 <span class="query-name-content">{query_content}</span>
-<img src="icon/edit.png" alt="Edit" title="Edit" class="img-btn" width="25px" />
+<img src="icon/edit.png" alt="Edit" title="Edit" class="img-btn" width="25px" onclick="loadQueryInfo('{query_id}')"/>
 <img src="icon/bin.png" alt="Delete" title="Delete" class="img-btn" width="25px" onclick="handleDeleteQuery('{query_id}')"/>
 </li>`;
 
 function getQueryDataFromLocalStorage() {
   let data = {};
   try {
-    data = JSON.parse(localStorage.getItem(KEY_QUERY_DATA));
+    data = JSON.parse(localStorage.getItem(KEY_QUERY_DATA)) || data;
   } catch (error) {}
   return data;
 }
@@ -100,23 +25,59 @@ function saveQueryInLocalStorage(key = undefined) {
   key = key || generateId();
   const queryObj = queryData[key] || {};
 
-  // TODO: write information
-  queryObj[KEY_QUERY_NAME] = "";
-  queryObj[KEY_QUERY] = "";
-  queryObj[KEY_ITERATION_MODE] = "";
-  queryObj[KEY_DELIMITER] = "";
+  const queryName = document.getElementById("queryName").value;
+  const query = document.getElementById("query").value;
+  const iterationMode = document.getElementById("iteration-mode").checked;
+  const delimiter = document.getElementById("delimiter").value;
+
+  if (queryName == "") {
+    showAlert("Query Name should not be empty");
+    return;
+  } else if (query == "") {
+    showAlert("Query should not be empty");
+    return;
+  } else if (delimiter == "") {
+    showAlert("Delimiter should not be empty");
+    return;
+  }
+
+  queryObj[KEY_QUERY_ID] = key;
+  queryObj[KEY_QUERY_NAME] = queryName;
+  queryObj[KEY_QUERY] = query;
+  queryObj[KEY_ITERATION_MODE] = iterationMode ? 1 : 0; //  Need to change when other mode will implemented
+  queryObj[KEY_DELIMITER] = delimiter;
   queryObj[KEY_CREATED_DATE] = new Date();
 
   queryData[key] = queryObj;
   localStorage.setItem(KEY_QUERY_DATA, JSON.stringify(queryData));
+  showAlert("Data saved successfully");
 }
 
 function loadQueryInfo(key = undefined) {
   const queryObj = queryData[key] || {};
+  const queryId = queryObj[KEY_QUERY_ID] || "";
   const queryName = queryObj[KEY_QUERY_NAME] || "";
   const query = queryObj[KEY_QUERY] || "";
-  const iterationMode = queryObj[KEY_ITERATION_MODE] || "";
-  const delimiter = queryObj[KEY_DELIMITER] || "";
+  const iterationMode = queryObj[KEY_ITERATION_MODE] == 1; //  Need to change when other mode will implemented
+  const delimiter = queryObj[KEY_DELIMITER] || "$";
+
+  document.getElementById("queryId").value = queryId;
+  document.getElementById("queryName").value = queryName;
+  document.getElementById("query").value = query;
+  document.getElementById("iteration-mode").checked = iterationMode;
+  document.getElementById("delimiter").value = delimiter;
+
+  document.getElementById("data").value = "";
+  document.getElementById("output").value = "";
+  document.getElementById("filename").value = "output.txt";
+
+  contentFormat();
+  handleChangeIterationMode();
+  toggleSidebar();
+
+  const showQueryName =
+    queryName.length <= 20 ? queryName : queryName.substring(0, 15) + "...";
+  showToast(`<b>${showQueryName}</b> file data loaded successfully`);
 }
 
 function isQueryNameExist(queryName, searchKeyRegex) {
@@ -168,7 +129,7 @@ function loadQueryNameList(searchKey = undefined) {
             "{query_content}",
             getFormattedQueryName(searchedChars, obj[KEY_QUERY_NAME])
           )
-          .replace("{query_id}", obj[KEY_QUERY_ID])
+          .replaceAll("{query_id}", obj[KEY_QUERY_ID])
       )
       .join("");
   } else {
@@ -197,6 +158,12 @@ function toggleSidebar() {
 }
 
 function handleDeleteQuery(queryId) {
+  const queryName = queryData[queryId][KEY_QUERY_NAME];
+  const showQueryName =
+    queryName.length <= 20 ? queryName : queryName.substring(0, 15) + "...";
+
+  showAlert(`<b>${showQueryName}</b> file has been deleted`);
+
   // Deleting query object from queryData
   delete queryData[queryId];
 
@@ -205,4 +172,24 @@ function handleDeleteQuery(queryId) {
 
   const queryNameSearch = document.getElementById("queryNameSearch").value;
   loadQueryNameList(queryNameSearch);
+}
+
+function handleClickSave() {
+  const queryId = document.getElementById("queryId").value;
+  saveQueryInLocalStorage(queryId);
+}
+
+function handleClickReset() {
+  document.getElementById("queryName").value = DEFAULT_FILE_NAME;
+  document.getElementById("query").value = "";
+  document.getElementById("iteration-mode").checked = true;
+  document.getElementById("delimiter").value = "$";
+  document.getElementById("queryId").value = "";
+  document.getElementById("data").value = "";
+  document.getElementById("output").value = "";
+  document.getElementById("filename").value = "output.txt";
+
+  contentFormat();
+  handleChangeIterationMode();
+  showToast("Data rested successfully");
 }

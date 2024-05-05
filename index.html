@@ -30,6 +30,7 @@
       <!-- Sidebar -->
 
       <div class="content-wrapper">
+        <input type="hidden" id="queryId" />
         <input
           type="text"
           placeholder="File Name"
@@ -95,8 +96,11 @@
           </table>
         </div>
 
-        <button id="generate">Generate</button>
-
+        <div class="btn-list">
+          <button id="generate" class="btn">Generate</button>
+          <button id="save" class="btn">Save</button>
+          <button id="reset" class="btn">Reset</button>
+        </div>
         <div class="output">
           <div class="toolbar">
             <label>Output:</label>

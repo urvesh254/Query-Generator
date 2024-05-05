@@ -13,6 +13,12 @@ addEvent("iteration-mode", "click", handleChangeIterationMode);
 // Generate Button
 addEvent("generate", "click", handleClickGenerateWorker);
 
+// Generate Button
+addEvent("save", "click", handleClickSave);
+
+// Generate Button
+addEvent("reset", "click", handleClickReset);
+
 // Download Output File
 addEvent("download", "click", downloadContent);
 
