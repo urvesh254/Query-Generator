@@ -48,6 +48,9 @@ function saveQueryInLocalStorage(key = undefined) {
   queryObj[KEY_DELIMITER] = delimiter;
   queryObj[KEY_CREATED_DATE] = new Date();
 
+  // Setting key to queryId if it is saving first time.
+  document.getElementById("queryId").value = key;
+
   queryData[key] = queryObj;
   localStorage.setItem(KEY_QUERY_DATA, JSON.stringify(queryData));
   showAlert("Data saved successfully");
@@ -109,7 +112,7 @@ function getFormattedQueryName(searchedChars, queryName) {
 function loadQueryNameList(searchKey = undefined) {
   const queryNameList = document.getElementById("queryNameList");
   const searchKeyRegex =
-    !searchKey || searchKey.trim() == 0
+    !searchKey || searchKey.trim().length == 0
       ? undefined
       : new RegExp(
           ".*" + [...searchKey.trim().toLowerCase()].join(".*") + ".*"
