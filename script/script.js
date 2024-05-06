@@ -60,9 +60,9 @@ function contentFormat() {
   for (const match of matches) {
     const placeholder = match[0];
 
-    let formattedMatch = `<span class="highlight">${placeholder}</span>`;
-    str = str.replaceAll(placeholder, formattedMatch);
     if (!placeholders.has(placeholder)) {
+      let formattedMatch = `<span class="highlight">${placeholder}</span>`;
+      str = str.replaceAll(placeholder, formattedMatch);
       placeholderTable.innerHTML += `
     <tr>
       <td class="text-center">${++i}</td>
@@ -124,10 +124,16 @@ function handleClickGenerate() {
     const inputs = document.querySelectorAll("#placeholder-table input");
     const placeholderIds = [...inputs].map((input) => input.id);
     const output = document.getElementById("output");
+    const delimiter = document.getElementById("delimiter");
 
     // Validate input
     if (query.value == "") {
       showAlert("Query should not be empty");
+      return;
+    }
+
+    if (delimiter.value == "") {
+      showAlert("Delimiter should not be empty");
       return;
     }
 
@@ -288,4 +294,8 @@ function replacePlaceholders(obj) {
   console.log("Data Length: ", data.length);
   console.log(`Total insert queries: ${lst ? lst.length : 0}`);
   return finalData;
+}
+
+function handleShowAboutInfo() {
+  showAlert("It will come soon.");
 }

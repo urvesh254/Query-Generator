@@ -35,14 +35,23 @@ header {
   color: #fff;
   padding: 20px;
   text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 h1 {
   margin: 0;
+  display: inline-block;
 }
 
 main {
   padding: 20px;
+}
+
+.menu-item {
+  font-size: 20px;
+  cursor: pointer;
 }
 
 .content-wrapper {
@@ -59,9 +68,6 @@ label {
   font-weight: 600;
   font-size: 18px;
   user-select: none;
-}
-
-label {
   display: inline-block;
   position: relative;
 }
@@ -112,6 +118,14 @@ textarea,
   min-width: 100%;
   min-height: 300px;
   max-height: 500px;
+}
+
+#queryName {
+  color: #555;
+  font-weight: bold;
+  font-size: 30px;
+  border: none;
+  border-bottom: 3px solid #ccc;
 }
 
 /* Highlighting Query */
@@ -267,20 +281,28 @@ td:last-child {
   text-align: center;
 }
 
-#generate {
+.btn-list {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-list .btn {
+  width: fit-content;
   background-color: #4caf50;
   color: #fff;
+  font-weight: bold;
   border: none;
   border-radius: 8px;
+  margin: 10px 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-#generate:hover {
+.btn-list .btn:hover {
   background-color: #388e3c;
 }
 
-#generate:disabled {
+.btn-list .btn:disabled {
   background-color: #cccccc;
   color: #666666;
   cursor: not-allowed;
@@ -310,9 +332,8 @@ td:last-child {
   margin-left: 10px;
 }
 
-#copy,
-#clear,
-#download {
+.img-btn {
+  width: 30px;
   border: none;
   border-radius: 8px;
   padding: 10px;
@@ -320,9 +341,7 @@ td:last-child {
   transition: background-color 0.3s ease;
 }
 
-#copy:hover,
-#clear:hover,
-#download:hover {
+.img-btn:hover {
   background-color: #aaa;
 }
 
@@ -482,4 +501,70 @@ footer {
   margin-top: 20px;
   font-size: 18px;
   color: #333;
+}
+
+/* Sidebar Style */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -105%;
+  width: 97.5%;
+  height: 100%;
+  background-color: white;
+  color: black;
+  margin-top: 76px;
+  padding: 20px;
+  transition: left 0.3s;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar #queryNameSearch {
+  width: 300px;
+  height: 40px;
+  flex-basis: 5%;
+}
+.sidebar #queryNameSearch:focus {
+  box-shadow: 0 4px 8px rgba(63, 81, 181, 0.3);
+}
+
+.sidebar #queryNameListDiv {
+  width: 100%;
+  flex-basis: 76%;
+  overflow: auto;
+}
+
+/* Style for the list */
+#queryNameList {
+  list-style-type: none;
+  width: 60%;
+  padding: 0;
+  margin: auto;
+}
+
+/* Style for the list items (cards) */
+#queryNameList .query-item {
+  background-color: #f4f4f4;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#queryNameList .query-name-content {
+  width: 88%;
+  overflow-wrap: break-word;
+}
+
+#queryNameList .query-item:hover {
+  box-shadow: 0 4px 8px rgba(63, 81, 181, 0.7);
+}
+
+#queryNameList .img-btn {
+  width: 25px;
 }
