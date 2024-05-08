@@ -247,7 +247,7 @@ function handleIteratingMode(placeholderIds) {
 
   // Validation Errors
   if (minPlaceholderIndex < 0) {
-    res["error"] = "Negative index not allowed";
+    res["error"] = "Negative index is not allowed";
   } else if (maxDataRowLen <= maxPlaceholderIndex) {
     res[
       "error"

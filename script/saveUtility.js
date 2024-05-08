@@ -4,8 +4,11 @@ const KEY_QUERY_ID = "queryId";
 const KEY_QUERY = "query";
 const KEY_ITERATION_MODE = "iteration-mode";
 const KEY_DELIMITER = "delimiter";
+const KEY_PLACEHOLDERS = "placeholders";
 const KEY_CREATED_DATE = "createdDate";
 const DEFAULT_FILE_NAME = "Untitled";
+const SHOW_QUERY_NAME_LENGTH = 15;
+const SAVE_UTILITY_DEFAULT_DELAY = 1500;
 const queryData = getQueryDataFromLocalStorage();
 const rawQueryItem = `<li class="query-item">
 <span class="query-name-content">{query_content}</span>
@@ -41,11 +44,18 @@ function saveQueryInLocalStorage(key = undefined) {
     return;
   }
 
+  const inputs = document.querySelectorAll("#placeholder-table input");
+  const placeholders = [...inputs].reduce((res, placeholder) => {
+    res[placeholder.id] = placeholder.value;
+    return res;
+  }, {});
+
   queryObj[KEY_QUERY_ID] = key;
   queryObj[KEY_QUERY_NAME] = queryName;
   queryObj[KEY_QUERY] = query;
   queryObj[KEY_ITERATION_MODE] = iterationMode ? 1 : 0; //  Need to change when other mode will implemented
   queryObj[KEY_DELIMITER] = delimiter;
+  queryObj[KEY_PLACEHOLDERS] = placeholders;
   queryObj[KEY_CREATED_DATE] = new Date();
 
   // Setting key to queryId if it is saving first time.
@@ -53,7 +63,16 @@ function saveQueryInLocalStorage(key = undefined) {
 
   queryData[key] = queryObj;
   localStorage.setItem(KEY_QUERY_DATA, JSON.stringify(queryData));
-  showAlert("Data saved successfully");
+
+  const showQueryName =
+    queryName.length < SHOW_QUERY_NAME_LENGTH
+      ? queryName
+      : queryName.substring(0, SHOW_QUERY_NAME_LENGTH) + "...";
+  const message = `<div style="display:flex;align-items:center;gap:2px;">
+  <img src="icon/check-mark.png"/>
+  <span><b>${showQueryName}</b> file data saved successfully</span>
+  </div>`;
+  showToast(message, SAVE_UTILITY_DEFAULT_DELAY);
 }
 
 function loadQueryInfo(key = undefined) {
@@ -63,6 +82,7 @@ function loadQueryInfo(key = undefined) {
   const query = queryObj[KEY_QUERY] || "";
   const iterationMode = queryObj[KEY_ITERATION_MODE] == 1; //  Need to change when other mode will implemented
   const delimiter = queryObj[KEY_DELIMITER] || "$";
+  const placeholders = queryObj[KEY_PLACEHOLDERS] || {};
 
   document.getElementById("queryId").value = queryId;
   document.getElementById("queryName").value = queryName;
@@ -78,9 +98,21 @@ function loadQueryInfo(key = undefined) {
   handleChangeIterationMode();
   toggleSidebar();
 
+  // Setting default placeholder values
+  for (const placeholderId of Object.keys(placeholders)) {
+    const placeholder = document.getElementById(placeholderId);
+    if (!placeholder) continue;
+    placeholder.value = placeholders[placeholderId];
+  }
+
   const showQueryName =
-    queryName.length <= 20 ? queryName : queryName.substring(0, 15) + "...";
-  showToast(`<b>${showQueryName}</b> file data loaded successfully`);
+    queryName.length < SHOW_QUERY_NAME_LENGTH
+      ? queryName
+      : queryName.substring(0, SHOW_QUERY_NAME_LENGTH) + "...";
+  showToast(
+    `<b>${showQueryName}</b> file data loaded successfully`,
+    SAVE_UTILITY_DEFAULT_DELAY
+  );
 }
 
 function isQueryNameExist(queryName, searchKeyRegex) {
@@ -163,15 +195,16 @@ function toggleSidebar() {
 function handleDeleteQuery(queryId) {
   const queryName = queryData[queryId][KEY_QUERY_NAME];
   const showQueryName =
-    queryName.length <= 20 ? queryName : queryName.substring(0, 15) + "...";
-
-  showAlert(`<b>${showQueryName}</b> file has been deleted`);
+    queryName.length < SHOW_QUERY_NAME_LENGTH
+      ? queryName
+      : queryName.substring(0, SHOW_QUERY_NAME_LENGTH) + "...";
 
   // Deleting query object from queryData
   delete queryData[queryId];
 
   // storing updated queryData localStorage.
   localStorage.setItem(KEY_QUERY_DATA, JSON.stringify(queryData));
+  showAlert(`<b>${showQueryName}</b> file has been deleted`);
 
   const queryNameSearch = document.getElementById("queryNameSearch").value;
   loadQueryNameList(queryNameSearch);
@@ -194,5 +227,5 @@ function handleClickReset() {
 
   contentFormat();
   handleChangeIterationMode();
-  showToast("Data rested successfully");
+  showToast("Data rested successfully", SAVE_UTILITY_DEFAULT_DELAY);
 }
