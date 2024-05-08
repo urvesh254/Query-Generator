@@ -36,6 +36,10 @@ addEvent("menuIcon", "click", toggleSidebar);
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") toggleSidebar();
+  else if (e.ctrlKey && (e.key === "s" || e.key === "S")) {
+    e.preventDefault();
+    handleClickSave();
+  }
 });
 
 // Query Name Search Event
