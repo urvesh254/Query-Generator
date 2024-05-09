@@ -60,19 +60,36 @@ function saveQueryInLocalStorage(key = undefined) {
 
   // Setting key to queryId if it is saving first time.
   document.getElementById("queryId").value = key;
+  try {
+    queryData[key] = queryObj;
+    localStorage.setItem(KEY_QUERY_DATA, JSON.stringify(queryData));
 
-  queryData[key] = queryObj;
-  localStorage.setItem(KEY_QUERY_DATA, JSON.stringify(queryData));
+    const showQueryName =
+      queryName.length < SHOW_QUERY_NAME_LENGTH
+        ? queryName
+        : queryName.substring(0, SHOW_QUERY_NAME_LENGTH) + "...";
+    const message = `<div style="display:flex;align-items:center;gap:2px;">
+        <img src="icon/check-mark.png"/>
+        <span><b>${showQueryName}</b> file data saved successfully</span>
+        </div>`;
+    showToast(message, SAVE_UTILITY_DEFAULT_DELAY);
+  } catch (error) {
+    if (error.name === "QuotaExceededError") {
+      showToast(
+        `<div style="color: #FF6347;"><b>Error:</b> Browser's local storage is full!!</div>`,
+        SAVE_UTILITY_DEFAULT_DELAY
+      );
+    } else {
+      showToast(
+        `<div style="color: #FF6347;">Something went wrong</div>`,
+        SAVE_UTILITY_DEFAULT_DELAY
+      );
+      console.error(error);
+    }
 
-  const showQueryName =
-    queryName.length < SHOW_QUERY_NAME_LENGTH
-      ? queryName
-      : queryName.substring(0, SHOW_QUERY_NAME_LENGTH) + "...";
-  const message = `<div style="display:flex;align-items:center;gap:2px;">
-  <img src="icon/check-mark.png"/>
-  <span><b>${showQueryName}</b> file data saved successfully</span>
-  </div>`;
-  showToast(message, SAVE_UTILITY_DEFAULT_DELAY);
+    // Deleting query object from queryData
+    delete queryData[key];
+  }
 }
 
 function loadQueryInfo(key = undefined) {
