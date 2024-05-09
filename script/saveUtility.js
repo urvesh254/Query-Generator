@@ -5,7 +5,6 @@ const KEY_QUERY = "query";
 const KEY_ITERATION_MODE = "iteration-mode";
 const KEY_DELIMITER = "delimiter";
 const KEY_PLACEHOLDERS = "placeholders";
-const KEY_CREATED_DATE = "createdDate";
 const DEFAULT_FILE_NAME = "Untitled";
 const SHOW_QUERY_NAME_LENGTH = 15;
 const SAVE_UTILITY_DEFAULT_DELAY = 1500;
@@ -56,23 +55,39 @@ function saveQueryInLocalStorage(key = undefined) {
   queryObj[KEY_ITERATION_MODE] = iterationMode ? 1 : 0; //  Need to change when other mode will implemented
   queryObj[KEY_DELIMITER] = delimiter;
   queryObj[KEY_PLACEHOLDERS] = placeholders;
-  queryObj[KEY_CREATED_DATE] = new Date();
 
   // Setting key to queryId if it is saving first time.
   document.getElementById("queryId").value = key;
+  try {
+    queryData[key] = queryObj;
+    localStorage.setItem(KEY_QUERY_DATA, JSON.stringify(queryData));
 
-  queryData[key] = queryObj;
-  localStorage.setItem(KEY_QUERY_DATA, JSON.stringify(queryData));
+    const showQueryName =
+      queryName.length < SHOW_QUERY_NAME_LENGTH
+        ? queryName
+        : queryName.substring(0, SHOW_QUERY_NAME_LENGTH) + "...";
+    const message = `<div style="display:flex;align-items:center;gap:2px;">
+        <img src="icon/check-mark.png"/>
+        <span><b>${showQueryName}</b> file data saved successfully</span>
+        </div>`;
+    showToast(message, SAVE_UTILITY_DEFAULT_DELAY);
+  } catch (error) {
+    if (error.name === "QuotaExceededError") {
+      showToast(
+        `<div style="color: #FF6347;"><b>Error:</b> Browser's local storage is full!!</div>`,
+        SAVE_UTILITY_DEFAULT_DELAY
+      );
+    } else {
+      showToast(
+        `<div style="color: #FF6347;">Something went wrong</div>`,
+        SAVE_UTILITY_DEFAULT_DELAY
+      );
+      console.error(error);
+    }
 
-  const showQueryName =
-    queryName.length < SHOW_QUERY_NAME_LENGTH
-      ? queryName
-      : queryName.substring(0, SHOW_QUERY_NAME_LENGTH) + "...";
-  const message = `<div style="display:flex;align-items:center;gap:2px;">
-  <img src="icon/check-mark.png"/>
-  <span><b>${showQueryName}</b> file data saved successfully</span>
-  </div>`;
-  showToast(message, SAVE_UTILITY_DEFAULT_DELAY);
+    // Deleting query object from queryData
+    delete queryData[key];
+  }
 }
 
 function loadQueryInfo(key = undefined) {
