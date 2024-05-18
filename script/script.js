@@ -46,6 +46,14 @@ function handleChangeIterationMode() {
 /* Query Field Handling - Start */
 function contentFormat() {
   const query = document.getElementById("query");
+
+  // Backing up placeholder values
+  const inputs = document.querySelectorAll("#placeholder-table input");
+  const placeholderObj = [...inputs].reduce((res, placeholder) => {
+    res[placeholder.id] = placeholder.value;
+    return res;
+  }, {});
+
   const overlay = document.getElementById("overlay");
   let str = query.value;
   const matches = str.matchAll(REGEX_PLACEHOLDER);
@@ -79,6 +87,13 @@ function contentFormat() {
   }
 
   overlay.innerHTML = str + "</br>";
+
+  // Restoring placeholder values
+  for (const placeholderId of Object.keys(placeholderObj)) {
+    const placeholder = document.getElementById(placeholderId);
+    if (!placeholder) continue;
+    placeholder.value = placeholderObj[placeholderId];
+  }
 
   handleChangeIterationMode();
 }
