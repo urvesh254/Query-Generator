@@ -3,3 +3,4 @@ script/test.js
 *.zip
 QueryGenerator/
 test.html
+.vscode/
