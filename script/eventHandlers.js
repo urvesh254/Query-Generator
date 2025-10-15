@@ -44,3 +44,18 @@ document.addEventListener("keydown", (e) => {
 
 // Query Name Search Event
 addEvent("queryNameSearch", "input", (e) => loadQueryNameList(e.target.value));
+
+// Import/Export Event Handlers
+addEvent("import", "click", () => {
+  document.getElementById("importModal").style.display = "flex";
+  document.getElementById("importModal").focus();
+});
+addEvent("export", "click", () => {
+  handleExportData();
+});
+
+addEvent("importCancel", "click", () => {
+  document.getElementById("importModal").style.display = "none";
+  document.getElementById("importFile").value = "";
+});
+addEvent("importConfirm", "click", handleImportData);

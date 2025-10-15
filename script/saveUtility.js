@@ -244,3 +244,65 @@ function handleClickReset() {
   handleChangeIterationMode();
   showToast("Data rested successfully", SAVE_UTILITY_DEFAULT_DELAY);
 }
+
+// Export data as JSON
+function handleExportData() {
+  const data = getQueryDataFromLocalStorage();
+
+  // ...settings logic if needed...
+  const dataStr = JSON.stringify(data);
+  const fileName = `query-generator-export-${new Date()
+    .toISOString()
+    .slice(0, 10)}.json`;
+  downloadFile(dataStr, fileName);
+  showToast(`<div style="display:flex;align-items:center;gap:2px;">
+        <img src="icon/check-mark.png"/>
+        <span>Data exported successfully.</span>
+        </div>`);
+}
+
+// Import data from JSON
+function handleImportData() {
+  const fileInput = document.getElementById("importFile");
+  const file = fileInput.files[0];
+  if (!file) {
+    showAlert("Please select a JSON file to import.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      const data = getQueryDataFromLocalStorage();
+      for (const obj of Object.keys(imported)) {
+        const queryId = generateId();
+        obj[KEY_QUERY_ID] = queryId; // Assign a new ID to avoid conflicts
+        data[queryId] = {
+          ...imported[obj],
+          [KEY_QUERY_ID]: queryId, // Ensure the ID is set correctly
+        };
+      }
+      localStorage.setItem(KEY_QUERY_DATA, JSON.stringify(data));
+
+      for (const key of Object.keys(queryData)) {
+        delete queryData[key];
+      }
+      for (const key of Object.keys(data)) {
+        queryData[key] = data[key];
+      }
+
+      // If you have settings, handle them here
+      showToast(`<div style="display:flex;align-items:center;gap:2px;">
+        <img src="icon/check-mark.png"/>
+        <span>Data imported successfully</span>
+        </div>`);
+      document.getElementById("importModal").style.display = "none";
+      document.getElementById("importFile").value = "";
+    } catch (err) {
+      showAlert("Invalid JSON file.");
+      console.error("Error parsing JSON:", err);
+    }
+  };
+  reader.readAsText(file);
+}

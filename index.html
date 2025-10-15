@@ -18,7 +18,11 @@
         title="Query List (ESC)"
       />
       <h1>Query Generator</h1>
-      <span class="menu-item" id="about">About</span>
+      <div class="menu-item">
+        <span class="sub-menu-item" id="import">Import</span>
+        <span class="sub-menu-item" id="export">Export</span>
+        <span class="sub-menu-item" id="about">About</span>
+      </div>
     </header>
     <main>
       <!-- Sidebar -->
@@ -166,6 +170,19 @@
     <footer>
       <h3>Developed by Urveshkumar Patel</h3>
     </footer>
+
+    <!-- Import Modal -->
+    <div class="custom-modal" id="importModal" style="display: none">
+      <div class="modal-content">
+        <h2>Import Data</h2>
+        <input type="file" id="importFile" accept="application/json" />
+        <div class="modal-actions btn-list">
+          <button id="importConfirm" class="btn">Import</button>
+          <button id="importCancel" class="btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+
     <script src="script/utility.js"></script>
     <script src="script/saveUtility.js"></script>
     <script src="script/script.js"></script>
